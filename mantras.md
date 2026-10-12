@@ -1,0 +1,16 @@
+# Soluna mantras used
+- I begin again, and that is enough.
+- I did my best today, and I let that be enough.
+- I move through today with a calm mind and an open heart.
+- I release what I cannot control and rest in what I can.
+- I am allowed to take up space.
+- My worth was never measured by how much I got done.
+- Small steps still carry me forward.
+- Tomorrow is a fresh page, and tonight I simply rest.
+- I choose kindness, starting with myself.
+- I am grateful for this week and proud of how far I've come.
+- I slow down and let joy find me.
+- Peace lives in this quiet moment.
+- I welcome this day with gratitude.
+- I rest now so I can rise renewed.
+- 2026-10-12 night: I set today down gently and trust the night.
