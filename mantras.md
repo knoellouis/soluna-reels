@@ -15,3 +15,4 @@
 - I rest now so I can rise renewed.
 - 2026-10-12 night: I set today down gently and trust the night.
 - 2026-10-13 morning: I meet this morning with steady, gentle courage.
+- 2026-10-13 night: I let today soften, and I soften with it.
