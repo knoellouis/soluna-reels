@@ -394,6 +394,81 @@ def style_radiance(k):
     return frame
 
 
+def style_orbit(k):
+    """Soluna itself: a small sun and moon circle each other on a fine ring."""
+    font = ImageFont.truetype(str(SERIF), 96)
+    lines = k.lines(font)
+    cx, cy, R = W / 2, 600, 210
+    ring = hexrgb(k.th["label"])
+    sun_s = sun_sprite(hexrgb("#C98A2B" if k.mode == "morning" else "#E3B160"), 0, 210)
+    moon_col = hexrgb("#1F2440") if k.mode == "morning" else hexrgb("#E3B160")
+    moon_s = moon_sprite(moon_col, 230)
+    start = -90 if k.mode == "morning" else 90  # sun on top in the morning, moon on top at night
+    stars = k.stars(61, 24, 160, 880, avoid=(cx, cy), avoid_r=340) if k.mode == "night" else []
+
+    def frame(t):
+        f = k.blank()
+        if stars:
+            k.draw_stars(f, stars, t, window(t, 0.4, 1.6))
+        p = window(t, 0, 1.6)
+        layer = Image.new("RGBA", (W * 2, H * 2), (0, 0, 0, 0))
+        ImageDraw.Draw(layer).ellipse((2 * (cx - R), 2 * (cy - R), 2 * (cx + R), 2 * (cy + R)),
+                                      outline=ring + (int(150 * p),), width=4)
+        f.alpha_composite(layer.resize((W, H), Image.LANCZOS))
+        a = math.radians(start + t * 14)
+        spr = sun_sprite(hexrgb("#C98A2B" if k.mode == "morning" else "#E3B160"), t * 10, 210)
+        paste_c(f, spr, cx + R * math.cos(a), cy + R * math.sin(a), p)
+        paste_c(f, moon_s, cx - R * math.cos(a), cy - R * math.sin(a), p)
+        k.label_at(f, t, 900, start=1.3)
+        k.lines_at(f, t, lines, 1000, 118, start=2.0)
+        k.footer_at(f, t, 1000 + 118 * len(lines) + 70, 4.6 + 0.45 * len(lines))
+        return f
+    return frame
+
+
+def style_arch(k):
+    """An arched window: the sun rises inside it, or the moon hangs in a starry arch."""
+    font = ImageFont.truetype(str(SERIF), 96)
+    lines = k.lines(font)
+    x0, x1, y0, y1 = 250, 830, 230, 960
+    r = (x1 - x0) / 2
+    edge = hexrgb(k.th["label"])
+    fill = hexrgb("#FBF7F1") if k.mode == "morning" else hexrgb("#2A3156")
+    shape = Image.new("L", (W * 2, H * 2), 0)
+    sd = ImageDraw.Draw(shape)
+    sd.ellipse((2 * x0, 2 * y0, 2 * x1, 2 * (y0 + 2 * r)), fill=255)
+    sd.rectangle((2 * x0, 2 * (y0 + r), 2 * x1, 2 * y1), fill=255)
+    shape = shape.resize((W, H), Image.LANCZOS)
+    outline = Image.new("RGBA", (W * 2, H * 2), (0, 0, 0, 0))
+    od = ImageDraw.Draw(outline)
+    od.arc((2 * x0, 2 * y0, 2 * x1, 2 * (y0 + 2 * r)), 180, 360, fill=edge + (255,), width=6)
+    od.line((2 * x0, 2 * (y0 + r), 2 * x0, 2 * y1), fill=edge + (255,), width=6)
+    od.line((2 * x1, 2 * (y0 + r), 2 * x1, 2 * y1), fill=edge + (255,), width=6)
+    od.line((2 * x0, 2 * y1, 2 * x1, 2 * y1), fill=edge + (255,), width=6)
+    outline = outline.resize((W, H), Image.LANCZOS)
+    stars = k.stars(71, 16, y0 + 60, y1 - 80, avoid=(W / 2, 640), avoid_r=170) if k.mode == "night" else []
+    stars = [s for s in stars if x0 + 30 < s[0] < x1 - 30]
+
+    def frame(t):
+        f = k.blank()
+        p = window(t, 0, 1.4)
+        inner = Image.new("RGBA", (W, H), fill + (255,))
+        if stars:
+            k.draw_stars(inner, stars, t, window(t, 0.6, 1.6))
+        q = window(t, 0.3, 4.0)
+        if k.mode == "morning":
+            paste_c(inner, sun_sprite(k.icon, t * 5, 380), W / 2, y1 + 120 - q * 420)
+        else:
+            paste_c(inner, moon_sprite(k.icon, 380), W / 2, 700 - q * 90)
+        f.paste(inner, (0, 0), shape.point(lambda v: int(v * p)))
+        f.alpha_composite(with_alpha(outline, p))
+        k.label_at(f, t, 1030, start=1.4)
+        k.lines_at(f, t, lines, 1120, 112, start=2.1)
+        k.footer_at(f, t, 1120 + 112 * len(lines) + 50, 4.7 + 0.45 * len(lines))
+        return f
+    return frame
+
+
 def pick_style(mode):
     d = datetime.date.today().toordinal()
     return STYLES[(d + (2 if mode == "night" else 0)) % len(STYLES)]
