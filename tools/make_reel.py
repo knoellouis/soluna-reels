@@ -243,7 +243,7 @@ def style_horizon(k):
     lines = k.lines(font)
     top = 400
     hy = 1300  # horizon
-    stars = k.stars(21, 22, 960, hy - 40, avoid=(W / 2, hy - 90), avoid_r=230) if k.mode == "night" else []
+    stars = k.stars(21, 22, 960, hy - 40, avoid=(W / 2, hy - 160), avoid_r=230) if k.mode == "night" else []
     line_col = hexrgb(k.th["label"])
 
     def frame(t):
@@ -253,9 +253,9 @@ def style_horizon(k):
         p = window(t, 0.2, 4.5)
         body = Image.new("RGBA", (W, H), (0, 0, 0, 0))
         if k.mode == "morning":
-            paste_c(body, sun_sprite(k.icon, t * 4), W / 2, hy + 120 - p * 260)
+            paste_c(body, sun_sprite(k.icon, t * 4), W / 2, hy + 200 - p * 415)  # ends fully above the line
         else:
-            paste_c(body, k.moon, W / 2, hy + 120 - p * 230)
+            paste_c(body, k.moon, W / 2, hy + 140 - p * 300)  # ends fully above the line
         mask = Image.new("L", (W, H), 0)
         ImageDraw.Draw(mask).rectangle((0, 0, W, hy), fill=255)
         f.paste(body, (0, 0), Image.composite(body.getchannel("A"), Image.new("L", (W, H), 0), mask))
