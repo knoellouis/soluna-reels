@@ -17,3 +17,4 @@
 - 2026-10-13 morning: I meet this morning with steady, gentle courage.
 - 2026-10-13 night: I let today soften, and I soften with it.
 - 2026-10-14 morning: I give today my presence, not my perfection.
+- 2026-10-14 night: I unclench my hands and let the evening hold me.
