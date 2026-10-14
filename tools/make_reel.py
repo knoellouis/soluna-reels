@@ -1,7 +1,7 @@
 """Render a Soluna Mantras reel (1080x1920, 30fps) as MP4, in one of several layouts.
 
 usage: python3 make_reel.py morning|night "Mantra text" out.mp4 [style]
-styles: classic, horizon, words, frame, radiance  (omit to auto-rotate by date)
+styles in rotation: classic, horizon, words, arch, radiance  (omit to auto-rotate by date); also available: frame, orbit
 """
 import datetime
 import math
@@ -20,7 +20,7 @@ SANS = FONTS / "fontsource-jost-5.3.0/files/jost-latin-500-normal.woff"
 
 W, H, FPS, DUR = 1080, 1920, 30, 10.0
 SS = 4
-STYLES = ["classic", "horizon", "words", "frame", "radiance"]
+STYLES = ["classic", "horizon", "words", "arch", "radiance"]
 
 THEMES = {
     "morning": dict(bg="#F4ECE1", icon="#C98A2B", label="#9A6A1F", text="#1F2440",
